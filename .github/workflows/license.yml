@@ -1,0 +1,17 @@
+# ------------------------------------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025 Jayesh Badwaik <j.badwaik@fz-juelich.de>
+# ------------------------------------------------------------------------------
+name: License Check
+
+on: [push, pull_request]
+
+jobs:
+  license-check:
+    name: License Compliance Check (reuse)
+    runs-on: ubuntu-latest
+    container:
+      image: fsfe/reuse
+    steps:
+      - uses: actions/checkout@v4
+      - run: reuse lint

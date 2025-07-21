@@ -1,0 +1,57 @@
+# ------------------------------------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025 Jayesh Badwaik <j.badwaik@fz-juelich.de>
+# ------------------------------------------------------------------------------
+
+name: All Tests
+
+on: [ push,  pull_request ]
+
+jobs:
+  quality-typecheck:
+    name: Code Quality Checking (mypy)
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install hatch mypy types-PyYAML
+          hatch env create types
+
+      - name: Run mypy
+        run: |
+          . venv/bin/activate
+          hatch env run --env types mypy .
+
+  compat-latest:
+    name: All Tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          python -m venv /root/venv
+          . /root/venv/bin/activate
+          pip install --upgrade pip
+          pip install hatch pytest
+          hatch env create test
+
+      - name: Run pytest
+        run: |
+          . /root/venv/bin/activate
+          hatch env run --env test pytest

@@ -1,0 +1,45 @@
+# ------------------------------------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025 Jayesh Badwaik <j.badwaik@fz-juelich.de>
+# ------------------------------------------------------------------------------
+
+name: Build Setup
+
+on: [workflow_dispatch]
+
+jobs:
+  test_container:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push test container
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          file: test/share/testenv/minimal.dockerfile
+          tags: ghcr.io/easypkg/test-environment:2025.07
+
+      - name:  Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ghcr.io/easypkg/test-environment:2025.07
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+
