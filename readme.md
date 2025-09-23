@@ -5,55 +5,44 @@
 
 # easypkg - a connector from easybuild to spack
 
-The connector will allow users to use spack as a package manager for the modules
-from the underlying easybuild framework.
-
-You can test the package using the docker image provided at
-
-```
-ghcr.io/easypkg/test-environment:latest
-```
-
-And one can run the tests by running the following commands in the repository
-root
-
-```
-docker run -v $PWD:/data -it ghcr.io/easypkg/test-environment:latest /bin/bash
-# Inside the container
-cd /data
-hatch --env test run -- pytest -s
-```
-
+The connector will allow users to use spack as a package manager for the modules from the underlying
+easybuild framework.
 
 
 ## Test Setup
 
 In order for people to test the connector without having to build GCC and other
-stuff from scratch, we provide a test docker image that contains everything
-setup and ready to use.
+stuff from scratch, we provide a test docker image that contains everything setup and ready to use.
+The image has the following modules available:
 
-```bash
-docker pull ghcr.io/jayeshbadwaik/easypkg-test:latest
+```shell
+------------------------------ /home/testuser/.local/easybuild/modules/all -------------------------
+   Bison/3.8.2    GCCcore/14.3.0    GCCcore/15.1.0 (D)    M4/1.4.19    M4/1.4.20 (D)
+   binutils/2.44    flex/2.6.4    zlib/1.3.1
+
+------------------------------ /usr/share/lmod/lmod/modulefiles/Core --------------------------------
+   lmod    settarg
+
 ```
 
-The image contains the following:
-1. A working installation of easybuild with the following modules
-   - Bison/3.8.2-GCCcore-15.1.0
-   - Bison/3.8.2
-   - GCC/15.1.0
-   - GCCcore/15.1.0
-   - M4/1.4.19-GCCcore-15.1.0
-   - M4/1.4.19
-   - binutils/2.44-GCCcore-15.1.0
-   - binutils/2.44
-   - flex/2.6.4-GCCcore-15.1.0
-   - flex/2.6.4
-   - help2man/1.49.3-GCCcore-15.1.0
-   - zlib/1.3.1-GCCcore-15.1.0
-   - zlib/1.3.1
+```shell
+docker pull ghcr.io/easypkg/base:v1
+```
 
-2. A working installation of spack with **no packages installed**
+The image is augmented with its buildcache which is available at:
 
+```shell
+docker pull ghcr.io/easypkg/base:v1.buildcache
+```
+
+The images were built using the command:
+
+```shell
+docker buildx build --push \
+    -t ghcr.io/easypkg/base:v1 \
+    --cache-from type=registry,ref=ghcr.io/easypkg/base:v1.buildcache,mode=max  \
+    -f setup/lib/container/v1/base.dockerfile .
+```
 
 
 
