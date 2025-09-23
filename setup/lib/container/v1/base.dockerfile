@@ -2,11 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (C) 2025 Jayesh Badwaik <j.badwaik@fz-juelich.de>
 # ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
-# SPDX-License-Identifier: Apache-2.0
-# Copyright (C) 2025 Jayesh Badwaik <j.badwaik@fz-juelich.de>
-# ------------------------------------------------------------------------------
 FROM  rockylinux:9
 SHELL ["/bin/bash", "-c"]
 
@@ -33,6 +28,15 @@ RUN   echo $PATH
 RUN   pip install easybuild
 
 # Compile Toolchain
-RUN   eb --optarch=GENERIC --robot --modules-tool Lmod .local/easybuild/easyconfigs/g/GCCcore/GCCcore-15.1.0.eb
-RUN   eb --optarch=GENERIC --robot --modules-tool Lmod .local/easybuild/easyconfigs/g/GCCcore/GCCcore-14.3.0.eb
+RUN   eb --optarch=GENERIC --robot --modules-tool Lmod .local/easybuild/easyconfigs/g/GCCcore/GCCcore-13.3.0.eb
+RUN   eb --optarch=GENERIC --robot --modules-tool Lmod .local/easybuild/easyconfigs/g/GCCcore/GCCcore-14.2.0.eb
+
+# Install Spack
+RUN   git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git ~/.local/spack
+RUN   echo "source $HOME/.local/spack/share/spack/setup-env.sh" >> /home/testuser/.bashrc
+
+
+
+
+
 
