@@ -35,7 +35,8 @@ def make_wide(formatter, w=140, h=100):
 def convert_parser(cp):
     cp.add_argument(
         "--input",
-        type=str,
+        nargs="+",
+        action="append",
         required=True,
         help="Path to Easybuild Modules Files",
     )
