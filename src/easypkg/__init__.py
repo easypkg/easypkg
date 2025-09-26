@@ -5,3 +5,4 @@
 
 import easypkg.polyfill
 import easypkg.lmod
+import easypkg.convert

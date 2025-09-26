@@ -67,5 +67,4 @@ def main():
     args = parser.parse_args()
 
     if args.command == "convert":
-        # Here you would call the function that handles the conversion
-        print(f"Generating Spack {args.output} file from Easybuild modules at {args.input}")
+        easypkg.convert.convert(args.input, args.output)
