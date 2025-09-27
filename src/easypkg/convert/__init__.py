@@ -20,4 +20,10 @@ def convert(input_dir_list, output):
         capture_output=True,
     )
 
-    print(json.dumps(json.loads(result.stdout.decode()), indent=4))
+    package_data = json.loads(result.stdout.decode())
+    print(json.dumps(package_data, indent=2))
+
+    for package in package_data:
+        pass
+        # print(f"Processing package: {package['package']}")
+        #print(json.dumps(package, indent=2))
